@@ -11,13 +11,19 @@ Screenshot
 
 How to Deploy
 -------------
-1. Ruby (1.9.3+) and Redis server must be installed
-2. Type `bundle install` to install required Ruby gems
-3. Type `compass compile` to compile Sass files
-4. Fire up your `redis-server`
-5. Specify target channels in `logbot.rb`
-6. Type `foreman start` to launch web server (WEBrick) and Logbot agent
-7. Visit [http://localhost:15000](http://localhost:15000).
+* Use Docker
+    1. Install [Docker](https://www.docker.com/)
+    2. Run `docker run -d -p 15000:15000 -e LOGBOT_NICK=xxxx -e LOGBOT_CHANNELS=#x,#y,#z -e LOGBOT_SERVER=168.95.1.1 audreyt/logbot`
+    3. Visit [http://localhost:15000](http://localhost:15000)
+
+* Manual installation
+    1. Ruby (1.9.3+) and Redis server must be installed
+    2. Run `bundle install` to install required Ruby gems
+    3. Run `compass compile` to compile Sass files
+    4. Fire up your `redis-server`
+    5. Specify target channels in `logbot.rb`
+    6. Run `foreman start` to launch web server (WEBrick) and Logbot agent
+    7. Visit [http://localhost:15000](http://localhost:15000).
 
 
 How to Contribute

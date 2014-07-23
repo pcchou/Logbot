@@ -10,7 +10,7 @@ run     bundle install
 run     compass compile
 run     cp logbot.rb.example logbot.rb
 expose  6379
-expose  :5000
+expose  15000
 env     LOGBOT_NICK logbot_
 env     LOGBOT_SERVER irc.freenode.net
 env     LOGBOT_CHANNELS #test56
