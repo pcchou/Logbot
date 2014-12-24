@@ -28,4 +28,28 @@ Pork::API.describe Util do
         eq("This is a link &lt;<a href=\"#{url}\">#{url}</a>&gt;")
     end
   end
+
+  def verify_text msg
+    expect(user_nick(  msg)).eq('name')
+    expect(user_action(msg)).eq(nil)
+    expect(user_text(  msg)).eq('hi')
+    expect(user_text_without_tags(msg)).eq('hi')
+  end
+
+  would 'for regular user' do
+    verify_text('nick' => 'name'       , 'msg' => 'hi')
+  end
+
+  would 'for slack user' do
+    verify_text('nick' => '_slack_bot1', 'msg' => '<name> hi')
+  end
+
+  would 'for action' do
+    msg = {'nick' => 'name', 'msg' => "\u0001ACTION hug\u0001"}
+
+    expect(user_nick(  msg)).eq('*')
+    expect(user_action(msg)).eq('hug')
+    expect(user_text(  msg)).eq('<span class="nick">name</span>&nbsp;hug')
+    expect(user_text_without_tags(msg)).eq('*hug*')
+  end
 end

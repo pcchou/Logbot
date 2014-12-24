@@ -67,15 +67,35 @@ module Util
   def user_nick msg
     if user_action(msg)
       '*'
+    elsif nick = slack_nick(msg)
+      escape(nick)
     else
       escape(msg['nick'])
     end
+  end
+
+  def slack_data msg
+    if msg['nick'].include?('slack_bot')
+      msg['msg'].match(/\A<(.+)> (.+)\Z/)[1..2]
+    else
+      []
+    end
+  end
+
+  def slack_nick msg
+    slack_data(msg).first
+  end
+
+  def slack_msg msg
+    slack_data(msg).last
   end
 
   def user_text msg
     if act = user_action(msg)
       "<span class=\"nick\">#{escape(msg['nick'])}</span>" \
       "&nbsp;#{autolink(escape(act))}"
+    elsif text = slack_msg(msg)
+      autolink(escape(text))
     else
       autolink(escape(msg['msg']))
     end
@@ -84,6 +104,8 @@ module Util
   def user_text_without_tags msg
     if act = user_action(msg)
       "*#{escape(act)}*"
+    elsif text = slack_msg(msg)
+      escape(text)
     else
       escape(msg['msg'])
     end
