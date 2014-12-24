@@ -32,16 +32,16 @@ Pork::API.describe Util do
   def verify_text msg
     expect(user_nick(  msg)).eq('name')
     expect(user_action(msg)).eq(nil)
-    expect(user_text(  msg)).eq('hi')
-    expect(user_text_without_tags(msg)).eq('hi')
+    expect(user_text(  msg)).eq('&lt;hi&gt; hi')
+    expect(user_text_without_tags(msg)).eq('&lt;hi&gt; hi')
   end
 
   would 'for regular user' do
-    verify_text('nick' => 'name'       , 'msg' => 'hi')
+    verify_text('nick' => 'name'       , 'msg' => '<hi> hi')
   end
 
   would 'for slack user' do
-    verify_text('nick' => '_slack_bot1', 'msg' => '<name> hi')
+    verify_text('nick' => '_slack_bot1', 'msg' => '<name> <hi> hi')
   end
 
   would 'for action' do
