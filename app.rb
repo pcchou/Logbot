@@ -90,7 +90,14 @@ module Util
   end
 
   def autolink text
-    text.gsub(%r{\bhttps?://\S+[\b/]}, '<a href="\0">\0</a>')
+    text.gsub(%r{\bhttps?://\S+[\b/]?}) do |m|
+      if m.end_with?('&gt;')
+        s = m.chomp('&gt;')
+        %Q{<a href="#{s}">#{s}</a>&gt;}
+      else
+        %Q{<a href="#{m}">#{m}</a>}
+      end
+    end
   end
 
   def date m
