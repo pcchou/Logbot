@@ -21,3 +21,7 @@ group :assets do
   gem 'compass'
   gem 'sass'
 end
+
+group :test do
+  gem 'pork'
+end
