@@ -68,7 +68,7 @@ module Util
     if user_action(msg)
       '*'
     elsif nick = slack_nick(msg)
-      escape(nick)
+      escape("ⓢ #{nick}")
     else
       escape(msg['nick'])
     end
