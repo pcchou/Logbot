@@ -1,0 +1,11 @@
+
+language: ruby
+rvm:
+  - 2.0
+  - 2.1
+  - 2.2
+  - rbx-2
+  - jruby
+
+install: 'bundle install --retry=3'
+script: 'ruby -r bundler/setup -Ilib test/test_app.rb'
