@@ -76,7 +76,11 @@ module Util
 
   def slack_data msg
     if msg['nick'].include?('slack_bot')
-      msg['msg'].match(/\A<(.+?)> (.+)\Z/)[1..2]
+      begin
+        return msg['msg'].match(/\A<(.+?)> (.+)\Z/)[1..2]
+      rescue
+        return []
+      end
     else
       []
     end
