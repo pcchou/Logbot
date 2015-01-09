@@ -213,7 +213,7 @@ var getColor = function() {
     }
     
     if (typeof md5 !== "undefined") {
-      var frag = parseInt(md5(str).substring(0,6), 16);
+      var frag = parseInt(md5(str.charAt(0)=='ⓢ'? str.substr(2):str).substring(0,6), 16);
     } else {
       var frag = Math.floor(Math.random() * 0xffffff);
       console.log('missing md5 support, using random color now!')
