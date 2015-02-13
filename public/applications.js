@@ -1,3 +1,10 @@
+var defaultOptions = {
+  mode : "fade", 
+  list : [
+    "^.*bot(?:[^a-z].*)?$"
+  ]
+};
+
 var parseColor = function() {
 
     var colors = [
@@ -356,7 +363,7 @@ var enableDatePicker = function() {
     autoOpen: false,
     resizable: false,
     height:280,
-    width:360,
+    width:340,
     modal: true,
     open: function (event, ui) {
       if (useJqueryUIDatePicker) {
@@ -441,3 +448,118 @@ var pageScrollTop = function(position) {
     scrollTop: position
   }, 1000);
 };
+
+
+//export method
+var styleIgnores;
+
+//load menu options for local storage
+var options;
+try {
+  var options = JSON.parse(window.localStorage.getItem('ignore_list'));
+  if (!options) {
+    options = $.extend({}, defaultOptions);
+  }
+  console.log(options);
+} catch (e){
+  console.log(e);
+  options = $.extend({}, defaultOptions);
+}
+//initiate layout
+(function () {
+  function readOptions (dialog, options) {
+    var mode = $(dialog).find('.mode').val();
+    var list = $(dialog).find('.list').val().split(/\r?\n/g);
+    
+    // remove empty item and strip leading and following space
+    list = list.filter(function(item){
+      return !(/^\s*$/.test(item));
+    })
+    .map(function(item){
+      return item.replace(/^\s+|\s+$/g, "");
+    });
+    
+    // check for malformed regex
+    for (var i = 0; i < list.length; i++) {
+      try {
+        new RegExp(list[i]);
+      } catch(e) {
+        window.alert('invalid regex ' + list[i]);
+        return false;
+      }
+    }
+    options.mode = mode;
+    options.list = list;
+    return true;
+  }
+  function renderOptions (dialog, options) {
+    $(dialog).find('.mode').val(options.mode);
+    $(dialog).find('.list').val(options.list.join('\r\n'));
+  }
+
+  $( "#ignore-list-dialog" ).dialog({
+    autoOpen: false,
+    resizable: false,
+    height:380,
+    width:$('body').innerWidth() >= 360 ? 340 : $('body').innerWidth() - 20,
+    modal: true,
+    open: function (event, ui) {
+      var dialog = $('#ignore-list-dialog');
+      renderOptions(dialog, options);
+      console.log('open');
+    },
+    buttons: {
+      "reset": function() {
+        var dialog = $('#ignore-list-dialog');
+        renderOptions(dialog, defaultOptions);
+      },
+      "cancel": function() {
+        $( this ).dialog( "close" );
+      },
+      "save": function() {
+        var dialog = $('#ignore-list-dialog');
+        if (readOptions(dialog, options)) {
+          try {
+            window.localStorage.setItem('ignore_list', JSON.stringify(options));
+          }catch (e) {}
+          styleIgnores($('.logs li'), options.list, ['fade', 'hide', 'off'], options.mode);
+          $( this ).dialog( "close" );
+        }
+      }
+    },
+    beforeClose: function() {
+    }
+  });
+
+  styleIgnores = function style(el, regexs, modes, currentMode) {
+    var filtered = [];
+    for (var i = 0; i < regexs.length; i++) {
+      try {
+        new RegExp(regexs[i], "ig");
+        filtered.push(regexs[i]);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    $(el).each(function(){
+      var i;
+      var _ =$(this);
+      var nick = _.find('.nick').text();
+      for (i = 0; i < modes.length; i++) {
+        _.removeClass(modes[i]);
+      }
+      for (i = 0; i < filtered.length; i++) {
+        if ((new RegExp(filtered[i], 'ig')).test(nick)) {
+          _.addClass(currentMode);
+          break;
+        }
+      } 
+    });
+  }
+  
+  $('#setting').on('click touchstart', function(){
+        $( "#ignore-list-dialog" ).dialog('open');
+  });
+  
+  styleIgnores($('.logs li'), options.list, ['fade', 'hide', 'off'], options.mode);
+}());

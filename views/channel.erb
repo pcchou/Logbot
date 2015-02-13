@@ -58,6 +58,22 @@
         <input type="date" style="max-width:300px;" max="<%= Date.today.to_s %>" id="other-date-picker" size="30" value="<%= @date %>">
       </p>
     </div>
+    <button id="setting">
+      <!-- https://www.iconfinder.com/tmthymllr -->
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAAw0lEQVR4nO3YMQrCQBBG4ae94AHESsS7S7yBJwoGkgtoJYpuMcFVN5v3wTRhipkpsvCDJEmSJD1sgQZogevEqwVOwG7M8l0Bg+euC7CJHKApYNhv1fF12UXiAAOwilxqgnpg/fxhmWhKHaUWb7ulDnD+wSD/EtrtQJ0/wQ7YRy91fwaHAgb/tHpGPoOSJGnezAMKGDx3mQdgHmAeYB4QaTIPwDxAkiTNmHlAAYPnLvMAzAPMA8wDIk3mAZgHSJIkSarcDXhZJ1XL3qdWAAAAAElFTkSuQmCC" alt="">
+    </button>
+    <div style="display:none" id="ignore-list-dialog" title="Ignore Options" style="text-align:center">
+      <p>
+        mode :
+        <select class="mode">
+          <option value="off">off</option>
+          <option value="hide">hidden</option>
+          <option value="fade">fade out</option>
+        </select> <br/>
+        Ignore Matchs <br/>
+        <textarea class="list" name="" id=""></textarea>
+      </p>
+    </div>
     <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
     <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css">

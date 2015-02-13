@@ -198,3 +198,51 @@ body
   .nav_page-up,
   .nav_page-down
     padding: 1px
+
+
+//setting button
+#setting
+  padding: 0px
+  border: 0px
+  margin: 0px
+  position: fixed
+  left: 10px
+  top: 10px
+  height: 40px
+  width: 40px
+  background: rgba(255, 255, 255, 0.5)
+  border-radius: 10px
+  line-height: 0px
+  text-align: center
+  color: #777777
+  cursor: pointer
+  box-shadow: 2px 2px 4px #888888
+  vertical-align: middle
+  space-holder
+    width: 0px
+    height: 100%
+    overflow: hidden
+  img
+    width: 30px
+    display: inline-block
+
+#ignore-list-dialog p
+  padding: 0px
+  margin: 0px
+  border: 0px
+  text-align: center
+  textarea
+    width: 95%
+    height: 140px
+
+//for very narrow screen, the dialog button will split into multi line, and make the space smaller
+@media only screen and (max-width : 360px)
+  #ignore-list-dialog p textarea
+    height: 110px
+
+//style class
+.logs > li
+  &.fade
+    opacity: 0.2
+  &.hide
+    display: none
