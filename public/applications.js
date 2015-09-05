@@ -1,7 +1,11 @@
 var defaultOptions = {
-  mode : "fade", 
+  mode : "fade",
   list : [
-    "^.*bot(?:[^a-z].*)?$"
+    "^.*bot(?:[^a-z].*)?$",
+    "^tracer$",
+    "^VIKI$",
+    "^Alpacas$",
+    "^oktw.*$",
   ]
 };
 
@@ -12,17 +16,17 @@ var parseColor = function() {
       "#000000",
       "#000080",
       "#008000",
-      
+
       "#ff0000",
       "#800040",
       "#800080",
       "#ff8040",
-      
+
       "#ffff00",
       "#80ff00",
       "#008000",
       "#00ffff",
-      
+
       "#0000ff",
       "#FF55FF",
       "#808080",
@@ -101,11 +105,11 @@ var parseColor = function() {
             })
           }
         }
-        
+
         return {
           styles : style
         };
-        
+
       }
     }
 
@@ -136,9 +140,9 @@ var parseColor = function() {
       text2 += "</span>";
       return text2;
     }
-    
+
     var parseColor_ = function(html) {
-        
+
         var html, matchrule, matchrule2, allStyle, temp, text, styles, stylefrag, i;
         allStyle = [2, 15, 22, 29, 31, 3];
         matchrule = /((?:\u0003\d\d?,\d\d?|\u0003\d\d?|\u0002|\u001d|\u000f|\u0016|\u001f)+)/g;
@@ -157,17 +161,17 @@ var parseColor = function() {
           styles = {};
           matchrule2 = /((?:\u0003\d\d?,\d\d?|\u0003\d\d?|\u0002|\u001d|\u000f|\u0016|\u001f))/g;
           fragTemp = matchrule2.exec(text);
-          
+
           if (!fragTemp) {
             continue;
           }
-          
+
           stylefrag = [];
           stylefrag.push(fragTemp[1]);
           while (fragTemp = matchrule2.exec(text)) {
             stylefrag.push(fragTemp[1]);
           }
-          
+
           // extract styles from style frag
           stylefrag.forEach(function(el){
             var temp2, i
@@ -188,9 +192,9 @@ var parseColor = function() {
           //insert styles into list and remove parsed tag
           temp.splice(i, 1, styles);
         }
-      
-        
-        
+
+
+
         var styleTemp = {};
         for (i = 0; i < temp.length; i++) {
           if (typeof temp[i] === "object") {
@@ -198,17 +202,17 @@ var parseColor = function() {
             copyOver(styleTemp, temp[i]);
           }
         }
-      
+
         for (i = 0; i < temp.length; i++) {
           if (typeof temp[i] === "object") {
             temp.splice(i, 2, wrap(temp[i + 1], temp[i]));
           }
         }
-      
+
         return temp.join('')
-    
+
     };
-    
+
     return parseColor_;
 } ();
 
@@ -218,21 +222,21 @@ var getColor = function() {
     if (cache[str]) {
       return cache[str];
     }
-    
+
     if (typeof md5 !== "undefined") {
       var frag = parseInt(md5(str.charAt(0)=='ⓢ'? str.substr(2):str).substring(0,6), 16);
     } else {
       var frag = Math.floor(Math.random() * 0xffffff);
       console.log('missing md5 support, using random color now!')
     }
-    
+
     var h = Math.floor((frag & 0xff0000 >> 16) / 255 * 360);
     var s = Math.floor((frag & 0xff00 >> 8) / 255 * 60 + 20);
     var l = Math.floor((frag & 0xff) / 255 * 20 + 50);
-    
+
     //convert color with jQuery
     var colorCode = $('<span></span>').css("color", "hsl(" + h + "," + s + "%," + l +"%)").css("color");
-    
+
     cache[str] = colorCode;
     return colorCode;
   }
@@ -242,7 +246,7 @@ var getColor = function() {
 setTimeout(function(){
   $("ul.logs li").each(function(){
     var nickField = $(this).children(".nick");
-    
+
     nickField.css("color",getColor(nickField.text()));
   });
   $(".wordwrap").each(function(){
@@ -290,7 +294,7 @@ var pollNewMsg = function(isWidget) {
         var date = new Date(parseFloat(msg["time"]) * 1000);
         var lis  = $(".logs > li").length;
         var url  = $("#today").text();
-        
+
         // $("#today").text() gets nothing automatically when isWidget
         var msgElement = $("<li id=\"" + lis + "\">").addClass("new-arrival")
           .append(link('time', url + '#' + lis, '#' + lis)
@@ -350,7 +354,7 @@ setTimeout(function(){
 
 var enableDatePicker = function() {
   var useJqueryUIDatePicker = !Modernizr.inputtypes.date;
-  
+
   $('#date-picker').on('change', function(event) {
     var targetDate = this.value;
     if (targetDate !== 'other') {
@@ -402,7 +406,7 @@ var enableDatePicker = function() {
       location.href = location.href.replace(/[^\/]+$/, targetDate);
     }
   });
-  
+
   var enableJqueryUIDatePicker = function() {
     var $input = $( "#other-date-picker" );
     /**
@@ -410,7 +414,7 @@ var enableDatePicker = function() {
     http://stackoverflow.com/questions/13010463/avoid-reopen-datepicker-after-select-a-date
     */
     $( "#other-date-picker" ).datepicker({
-      fixFocusIE: false,    
+      fixFocusIE: false,
       onSelect: function(dateText, inst) {
         this.fixFocusIE = true
         $(this).change().focus();
@@ -470,7 +474,7 @@ try {
   function readOptions (dialog, options) {
     var mode = $(dialog).find('.mode').val();
     var list = $(dialog).find('.list').val().split(/\r?\n/g);
-    
+
     // remove empty item and strip leading and following space
     list = list.filter(function(item){
       return !(/^\s*$/.test(item));
@@ -478,7 +482,7 @@ try {
     .map(function(item){
       return item.replace(/^\s+|\s+$/g, "");
     });
-    
+
     // check for malformed regex
     for (var i = 0; i < list.length; i++) {
       try {
@@ -553,13 +557,13 @@ try {
           _.addClass(currentMode);
           break;
         }
-      } 
+      }
     });
   }
-  
+
   $('#setting').on('click touchstart', function(){
         $( "#ignore-list-dialog" ).dialog('open');
   });
-  
+
   styleIgnores($('.logs li'), options.list, ['fade', 'hide', 'off'], options.mode);
 }());
