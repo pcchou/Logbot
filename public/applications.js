@@ -6,6 +6,9 @@ var defaultOptions = {
     "^VIKI$",
     "^Alpacas$",
     "^oktw.*$",
+    "^Marcas.*$",
+    "^MarcasDev.*$",
+    "^MarcasDev1.*$",
   ]
 };
 
